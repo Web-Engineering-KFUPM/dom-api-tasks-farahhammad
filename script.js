@@ -126,3 +126,50 @@ data.main.temp      → temperature (°C)
 data.main.humidity  → humidity (%)
 data.wind.speed     → wind speed (m/s)
 */
+
+
+const weatherBtn = document.getElementById("t4-loadWx");
+const tempEl     = document.getElementById("t4-temp");
+const humEl      = document.getElementById("t4-hum");
+const windEl     = document.getElementById("t4-wind");
+const errEl      = document.getElementById("t4-err");
+
+const API_KEY = "9c29da573838fd8cdd561179419142d7";
+
+async function loadWeather() {
+    try {
+        tempEl.textContent = "…";
+        humEl.textContent  = "…";
+        windEl.textContent = "…";
+        errEl.textContent  = "";
+
+        const base  = "https://api.openweathermap.org/data/2.5/weather";
+        const city  = "Dammam";
+        const units = "metric"; // °C and m/s
+        const url   = `${base}?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=${units}`;
+
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        const data = await res.json();
+
+        const temp = data?.main?.temp;
+        const hum  = data?.main?.humidity;
+        const wind = data?.wind?.speed;
+
+
+        tempEl.textContent = temp !== undefined ? `${temp} °C` : "—";
+        humEl.textContent  = hum  !== undefined ? `${hum} %`   : "—";
+        windEl.textContent = wind !== undefined ? `${wind} m/s`: "—";
+        errEl.textContent  = ""; // clear any old errors
+    } catch (err) {
+
+        errEl.textContent = "Could not load weather data.";
+        tempEl.textContent = "—";
+        humEl.textContent  = "—";
+        windEl.textContent = "—";
+        console.error("Error fetching weather:", err);
+    }
+}
+
+weatherBtn.addEventListener("click", loadWeather);
