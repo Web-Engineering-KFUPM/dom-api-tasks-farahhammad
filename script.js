@@ -43,8 +43,13 @@ button.addEventListener("click", function () {
     // change text here
 });
 */
- 
+// Get elements
+const button = document.getElementById("t2-btn");
+const statusEl = document.getElementById("t2-status");
 
+button.addEventListener("click", function () {
+    statusEl.textContent = "You clicked the button!";
+});
 /*  
 =======================================
 TODO3: Inspiring Quote Board
