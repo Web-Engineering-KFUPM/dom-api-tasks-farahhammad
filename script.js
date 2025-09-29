@@ -76,7 +76,31 @@ Use:
 data.content   // the quote text
 data.author    // the author
 */
- 
+
+const quoteBtn = document.getElementById("t3-loadQuote");
+const quoteEl = document.getElementById("t3-quote");
+const authorEl = document.getElementById("t3-author");
+
+
+async function loadQuote() {
+    try {
+        const res = await fetch("https://dummyjson.com/quotes/random");
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        const data = await res.json();
+
+        quoteEl.textContent = `"${data.quote}"`;
+        authorEl.textContent = `— ${data.author}`;
+    } catch (err) {
+        quoteEl.textContent = "Could not load quote.";
+        authorEl.textContent = "No available author";
+        console.error("Error fetching quote:", err);
+    }
+}
+
+quoteBtn.addEventListener("click", loadQuote);
+
+
 
 /*  
 =======================================
